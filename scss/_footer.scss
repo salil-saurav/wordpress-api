@@ -1,0 +1,230 @@
+// ==========> Contact Section <========== \\
+
+.contact-section {
+    background-repeat: no-repeat;
+    background-size: cover;
+    .contact-form-container {
+        @include padding(null,30px,null,null);
+        .wpcf7-response-output {
+            color: $white;
+            position: absolute;
+            bottom: 5px;
+            left: 30px;
+        }
+        .contact-form {
+            @include padding(65px,50px,65px,50px);
+            background-color: $primary-color;
+            h2 {
+                font-size: 40px;
+                @include margin(null,null,35px,null);
+            }
+            input:not([type="submit"]),textarea {
+                border: none;
+                width: 100%;
+                background-color: $primary-color;
+                color: $secondary-color;
+                border-bottom: solid 1px $primary-hightlight-color;
+                @include padding(10px,0px,4px,0px);
+                &:focus {
+                    outline: none;
+                }
+                &::placeholder {
+                    color: $secondary-color;
+                    opacity: 1;
+                  }
+                  
+                  &::-ms-input-placeholder {
+                    color: $secondary-color;
+                  }
+            }
+            textarea {
+                resize: none;
+            }
+            label {
+                width: 100%;
+                display: block;
+                @include margin(null,null,0px,null)
+            }
+            .wpcf7-not-valid-tip {
+                @include margin(5px,null,null,null);
+                font-size: 14px;
+            }
+            .wpcf7-submit {
+                border: solid 1px $secondary-color !important;
+                background-color: $secondary-color !important;
+                color: $primary-color !important;
+                text-transform: uppercase;
+                font-family: $body-font;
+                font-size: 15px;
+                font-weight: 700;
+                letter-spacing: .5px;
+                max-width: 185px;
+                width: 100%;
+                @include transition;
+                @include margin(20px,null,null,null);
+                &:focus {
+                    outline: none;
+                }
+                &:hover {
+                    background-color: $primary-color !important;
+                    color: $secondary-color !important;
+                }
+            }
+            
+        }
+    }
+    .contact-info-container {
+        @include padding(null,null,null,55px);
+        h2 {
+            @include margin(null,null,25px,null);
+        }
+        .location-info-container {
+            color: $white;
+            h5 {
+                font-size: 20px;
+                font-weight: 700;
+                font-family: $body-font;
+                letter-spacing: 0;
+            }
+            .location-info-single {
+                h6 {
+                    font-weight: 800;
+                    font-size: 20px;
+                    font-family: $body-font;
+                }
+                &:not(:last-of-type) {
+                    @include margin(null,null,60px,null);
+                }
+            }
+            .contact-info-single {
+                position: relative;
+                @include padding(null,null,null,20px);
+                &:before {
+                    content:"";
+                    position: absolute;
+                    left: 0;
+                    top: 2px;
+                    width: 5px;
+                    height: 50px;
+                    background-color: $white;
+                }
+                h6 {
+                    font-weight: 800;
+                    font-size: 20px;
+                    font-family: $body-font;
+                    @include margin(null,null,3px,null);
+                }
+                &:not(:last-of-type) {
+                    @include margin(null,null,30px,null);
+                }
+                p,
+                a {
+                    color: $white;
+                    font-size: 20px;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+
+// ==========> Map Section <========== \\
+
+.map-section {
+    .map-container {
+        height: 580px;
+    }
+    
+}
+
+// ==========> Quick Links Section <========== \\
+
+.quick-links-section {
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: $white;
+    .logo {
+        @include transition;
+        @include margin(0px,null,30px,null);
+        max-width: 100px;
+        width: 100%;
+    }
+    .social-media {
+        @include margin(50px,null,null,null);
+        h5 {
+            @include margin(null,30px,null,null);
+        }
+        a {
+            border: solid 1px $white;
+            width: 38px;
+            height: 38px;
+            color: $white;
+            text-decoration: none;
+            @include transition;
+            border-radius: 100%;
+            &:hover {
+                border-color: $primary-color;
+                background-color: $primary-color;
+            }
+            &:not(:last-of-type) {
+                @include margin(null,20px,null,null);
+            }
+        }
+    }
+    h2 {
+        font-size: 24px;
+        color: $white;
+        @include margin(null,null,40px,null);
+    }
+    .quick-links-nav {
+        @include padding(null,100px,null,100px);
+        ul {
+            list-style: none;
+            @include margin(null,null,0px,null);
+            @include padding(0px,0px,0px,0px);
+            li {
+                &:not(:last-child) {
+                    @include margin(nll,null,20px,null);
+                }
+                a {
+                    text-decoration: none;
+                    color: $white;
+                }
+            }
+        }
+    }
+    .quick-links-contact-info-single {
+        .icon {
+            max-width:25px;
+            width: 100%;
+            @include margin(null,10px,null,null);
+        }
+        &:not(:last-of-type) {
+            @include margin(null,null,30px,null);
+        }
+        p {
+            @include margin(null,null,0px,null);
+        }
+        a {
+            color: $white;
+            text-decoration: none;
+            display: inline-block;
+        }
+    }
+}
+
+// ==========> Credits Section <========== \\
+
+.credits-section {
+    background-color: $black;
+    color: $white;
+    @include padding(30px,null,30px,null);
+    text-align: center;
+    p {
+        @include margin(null,null,0px,null);
+    }
+}

@@ -1,0 +1,48 @@
+// ==========> Buttons <========== \\
+
+.btn {
+	text-transform: uppercase;
+	font-family: $body-font;
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: .5px;
+	border-radius: 0;
+	border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+	@include padding(15px, 45px, 15px, 45px);
+	@include transition;
+
+	&#{&}-primary {
+		background-color: $primary-color;
+		color: $secondary-color;
+		&:hover {
+			background-color: $secondary-color;
+			color: $primary-color;
+		}
+        &.btn-bordered {
+            color: $primary-color;
+			border: solid 1px $primary-color;
+            background-color: $white;
+            &:hover {
+                color: $white;
+                background-color: $primary-color;
+            }
+		}
+	}
+
+	&#{&}-secondary {
+		background-color: $secondary-color;
+		color: $primary-color;
+
+		&:hover {
+			background-color: $primary-color;
+			color: $secondary-color;
+		}
+		&.btn-bordered {
+			border: solid 1px $secondary-color;
+		}
+	}
+}

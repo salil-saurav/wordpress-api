@@ -1,0 +1,439 @@
+//=====> Banner Section <=====\\
+
+.banner-section {
+  position: relative;
+  z-index: 0;
+  .banner-slider {
+	.owl-nav {
+		button {
+			height: 98px;
+			&:before {
+				transform: rotate(-45deg);
+			  }
+		
+			  &:after {
+				transform: rotate(45deg);
+			  }
+		}
+		.owl-next {
+			&:before {
+			  transform: rotate(45deg);
+			}
+	  
+			&:after {
+			  transform: rotate(-45deg);
+			}
+		  }
+	}
+  }
+  .slider-single {
+    min-height: 100vh;
+    position: relative;
+    &:before {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+  }
+
+  .content-container {
+    position: relative;
+    z-index: 2;
+    color: $white;
+    @include margin(null, auto, null, auto);
+
+    h1 {
+      font-size: 60px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 46px;
+      font-weight: 400;
+    }
+
+    .slider-content {
+      font-size: 20px;
+      margin-top: 25px;
+      max-width: 1020px;
+      @include margin(null, auto, null, auto);
+    }
+
+    .slider-cta {
+      @include margin(70px, null, null, null);
+
+      a:not(:last-of-type) {
+        @include margin(null, 20px, null, null);
+      }
+
+      .btn {
+        min-width: 185px;
+      }
+    }
+
+    .slider-bottom-content {
+      font-size: 20px;
+      @include margin(30px, null, null, null);
+
+      a {
+        color: $white;
+        opacity: 1;
+        text-decoration: underline;
+        @include transition;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .owl-nav {
+    &:before,
+    &:after {
+      content: "";
+      width: 50px;
+      height: 2.5px;
+    }
+    &:before {
+      top: 31px;
+    }
+
+    &:after {
+      bottom: 31px;
+    }
+  }
+
+  .owl-prev {
+    left: 130px;
+  }
+
+  .owl-next {
+    right: 130px;
+  }
+}
+
+// ==========> About Section <========== \\
+
+.about-section {
+  .content {
+    p {
+      font-weight: 300;
+      line-height: 1.4;
+    }
+  }
+
+  .about-section-image {
+    flex: 1 0 auto;
+    @include margin(null, 40px, null, null);
+  }
+
+  .counter-container {
+    background-color: $white;
+    @include margin(80px, null, null, null);
+    @include padding(40px, 40px, 40px, 40px);
+    border: solid 1px $primary-color;
+
+    h3,
+    span {
+      color: $primary-color;
+      font-size: 60px;
+      letter-spacing: 0.58px;
+      font-weight: 600;
+    }
+  }
+
+  .decorator-single {
+    position: absolute;
+    &#decorator-1 {
+      left: 0;
+      bottom: -65px;
+    }
+
+    &#decorator-2 {
+      right: 0;
+      bottom: -65px;
+    }
+  }
+}
+
+// ==========> Treatments Section <========== \\
+
+.treatment-section {
+  background-repeat: no-repeat;
+
+  .section-title {
+    flex: 1 0 auto;
+    @include margin(null, 40px, null, null);
+  }
+
+  .content {
+    p {
+      line-height: 1.4;
+    }
+  }
+
+  .slick-slide {
+    margin: 0 15px;
+  }
+
+  .slick-list {
+    margin: 0 -15px;
+  }
+
+  .treatments-slider {
+    @include margin(30px, null, null, null);
+  }
+
+  .treatments-single {
+    h3 {
+      font-size: 30px;
+    }
+
+    .content {
+      background-color: $primary-color;
+      @include padding(35px, 35px, 35px, 35px);
+
+      p {
+        font-size: 17px;
+        font-weight: 500;
+
+        &:last-of-type {
+          @include margin(null, null, 30px, null);
+        }
+      }
+    }
+  }
+  .bottom-cta-content,
+  .bottom-text-content {
+    @include margin(30px, null, null, null);
+  }
+  .bottom-text-content {
+    a {
+      color: $secondary-color;
+      font-size: 20px;
+      text-decoration: underline;
+      line-height: 0.5;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+// ==========> Products Section <========== \\
+
+.products-section {
+  .left-container {
+    @include margin(null, 30px, null, null);
+    .title-content {
+      p {
+        line-height: 1.3;
+      }
+    }
+  }
+  .products-slider {
+    @include margin(40px, null, null, null);
+	.owl-nav {
+		button {
+			top: 35%;
+		}
+	}
+  }
+  .products-single {
+    h3 {
+      font-size: 20px;
+      @include margin(null, null, 10px, null);
+    }
+    .content {
+      @include margin(30px, null, null, null);
+    }
+    h6 {
+      font-size: 20px;
+    }
+  }
+}
+
+// ==========> Health Benefits Section <========== \\
+
+.health-benefits-section {
+  .decorator-single {
+    position: absolute;
+    &#decorator-1 {
+      bottom: -50px;
+      right: 0;
+    }
+  }
+  .health-benefits-section-container {
+    .health-benefits-section-image {
+      max-width: 57%;
+      width: 100%;
+      flex: 1 0 auto;
+    }
+  }
+  .health-benefits-section-content {
+    h2 {
+      line-height: 1.5;
+    }
+    .content {
+      p {
+        line-height: 1.6;
+        font-size: 17px;
+      }
+      ul {
+        color: $primary-color;
+        font-weight: 600;
+        font-size: 17px;
+        li {
+          &:not(:last-child) {
+            @include padding(null, null, 10px, null);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ==========> Gallery Section <========== \\
+
+.gallery-section {
+  .gallery {
+    @include margin(10px, null, null, null);
+  }
+}
+
+// ==========> Testimonials Section <========== \\
+
+.testimonials-section {
+  background-repeat: no-repeat;
+  background-size: cover;
+  .testimonials-image {
+    @include margin(30px, null, 30px, null);
+  }
+  .testimonials-slider-container {
+    max-width: 960px;
+    width: 100%;
+    @include margin(null, auto, null, auto);
+    .testimonials-slider {
+      .owl-next {
+        right: -260px;
+      }
+      .owl-prev {
+        left: -260px;
+      }
+      button {
+        top: 18%;
+        &:before,
+        &:after {
+          background-color: $secondary-color;
+        }
+        span {
+          display: none;
+        }
+      }
+      .testimonials-single {
+        .content {
+          p {
+            font-size: 17px;
+            color: $black;
+          }
+        }
+        .testimonials-designation {
+          @include margin(30px, null, null, null);
+          h3 {
+            font-size: 20px;
+          }
+          h6 {
+            text-transform: uppercase;
+          }
+          button {
+            display: none !important;
+          }
+        }
+      }
+    }
+  }
+
+  .testimonials-nav-container {
+    max-width: 350px;
+    width: 100%;
+    @include margin(30px, auto, null, auto);
+    .testimonials-nav {
+      .avatar {
+        @include transition;
+      }
+      .owl-item {
+        .testimonials-nav-single {
+          @include transition;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.5;
+          width: 90px;
+          height: 90px;
+          img {
+            border-radius: 100%;
+            width: 70px;
+            height: 70px;
+            @include transition;
+          }
+        }
+        &.center {
+          .testimonials-nav-single {
+            opacity: 1;
+            img {
+              width: 90px;
+              height: 90px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ==========> Terms & Conditions Section <========== \\
+
+.terms-and-conditions-section {
+  .section-title {
+    h2 {
+      @include margin(null, null, 35px, null);
+    }
+  }
+  .content {
+    max-width: 1090px;
+    width: 100%;
+    @include margin(null, auto, null, auto);
+    h5 {
+      color: $primary-color;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      &:not(:first-of-type) {
+        @include margin(40px, null, null, null);
+      }
+    }
+    p {
+      font-size: 17px;
+    }
+  }
+  .cta-btn-section {
+    @include margin(30px, null, null, null);
+  }
+  .decorator-single {
+    position: absolute;
+    &#decorator-1 {
+      top: -50px;
+      left: 0;
+    }
+    &#decorator-2 {
+      right: -60px;
+      bottom: -150px;
+    }
+  }
+}

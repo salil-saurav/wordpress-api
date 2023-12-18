@@ -1,0 +1,95 @@
+// ==========> Base <========== \\
+
+//=====> Body <=====\\
+
+html,
+body {
+	overflow-x: hidden;
+}
+
+a {
+	color: $secondary-color;
+	text-underline-offset: initial;
+	text-decoration: underline;
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+//=====> Mixins <=====\\
+
+@mixin transition {
+	-webkit-transition: 0.25s ease-in-out;
+	transition: 0.25s ease-in-out;
+}
+
+@include xxlUp {
+
+	.container,
+	.container-lg,
+	.container-md,
+	.container-sm,
+	.container-xl,
+	.container-xxl {
+		max-width: 1195px;
+	}
+}
+
+//=====> Owl Carousel <=====\\
+
+.owl-nav {
+	button {
+		position: absolute;
+		z-index: 2;
+		width: 50px;
+		height: 50px;
+		background-color: transparent !important;
+		top: 50%;
+		transform: translateY(-50%);
+		span {
+			display: none;
+		}
+		&:before,
+		&:after {
+			content: "";
+			width: 35px;
+			height: 2px;
+			background-color: $primary-color;
+			display: block;
+			position: absolute;
+			left: 0;
+			opacity: 1;
+		}
+	
+		&:before {
+			top: 36px;
+		}
+	
+		&:after {
+			bottom: 36px;
+		}
+	}
+}
+
+.owl-prev {
+	left: -130px;
+
+	&:before {
+		transform: rotate(45deg);
+	}
+
+	&:after {
+		transform: rotate(-45deg);
+	}
+}
+
+.owl-next {
+	right: -130px;
+	&:before {
+		transform: rotate(-45deg);
+	}
+
+	&:after {
+		transform: rotate(45deg);
+	}
+}
