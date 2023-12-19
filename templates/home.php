@@ -19,5 +19,6 @@ $data = get_api_data(); ?>
     }
 </style>
 
+<?php   ?>
 
 <?php get_footer(); ?>

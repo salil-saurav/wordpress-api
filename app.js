@@ -43,24 +43,19 @@ async function fetchDataWithBasicAuth(url, username, password) {
     try {
         const apiData = await fetchDataWithBasicAuth(url, username, password);
         const returedApiData = apiData.properties.property;
-        // const storedData = require("./public/data.json").property;
-        // parsedData = returedApiData;
-        // const data = (id) => {
-        //     returedApiData.map((data) => {
-        //     })
-        // }
         const getTheData = (id) => {
             const found = returedApiData.find(obj => obj.id === id);
             if (found) {
-                console.log(found);
+                return found;
             } else {
                 console.log("not found");
             }
         }
-        // returedApiData.map(ele => console.log(ele.status));
-        getTheData(550094);
-        // storedData.map(item => console.log(item.openhomes));
-        // console.log(arrID);
+        console.log(getTheData(489532));
+        returedApiData.forEach(element => {
+            // console.log(element.videos);
+            // console.log(element.id);
+        });
     } catch (error) {
         console.error("Error:", error);
     }

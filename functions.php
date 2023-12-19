@@ -38,9 +38,6 @@ add_action('wp_enqueue_scripts', 'add_scripts', 999);
 //     'primary' => __('Primary Menu', 'Wonder Thai Massage'),
 // ));
 
-
-// Add this code to your theme's functions.php file or a custom plugin
-
 function remove_custom_post_types()
 {
     $post_types_to_remove = array('treatments', 'products', 'testimonials', 'galleries');
@@ -57,63 +54,12 @@ add_action('init', 'remove_custom_post_types');
 // Api Fetch 
 
 
-// function fetch_api_data()
-// {
-//     $curl = curl_init();
-//     $username = 'di.balich';
-//     $password = 'G$p%8S=es#Cx';
-//     $apiEndpoint = "https://api.open2view.com/nz/properties.json?detail=full";
-
-//     curl_setopt_array(
-//         $curl,
-//         array(
-//             CURLOPT_URL => $apiEndpoint,
-//             CURLOPT_RETURNTRANSFER => true,
-//             CURLOPT_FOLLOWLOCATION => true,
-//             CURLOPT_ENCODING => "",
-//             CURLOPT_MAXREDIRS => 10,
-//             CURLOPT_TIMEOUT => 30,
-//             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//             CURLOPT_CUSTOMREQUEST => "GET",
-//             CURLOPT_HTTPHEADER => array(
-//                 "Authorization: Basic " . base64_encode("$username:$password"),
-//             ),
-//         )
-//     );
-
-//     $response = curl_exec($curl);
-//     $apiDataArr = json_decode($response, true);
-//     $error = curl_error($curl);
-
-//     $data_to_return = $apiDataArr["properties"];
-
-//     curl_close($curl);
-
-//     $filename = esc_url(get_template_directory_uri()) . '/public/data.json';
-//     file_put_contents($filename, json_encode($data_to_return));
-
-//     if ($error) {
-//         echo "cURL Error: " . $error;
-//     } else {
-//         return $data_to_return;
-//     }
-// }
-// try {
-//     $apiKey = getenv("API_KEY");
-
-//     if ($apiKey === false) {
-//         throw new Exception("API_KEY environment variable is not set.");
-//     }
-//     // Proceed with the rest of your code using $apiKey
-//     echo "API_KEY: " . $apiKey;
-// } catch (Exception $e) {
-//     echo "Error: " . $e->getMessage();
-// }
-
-function fetch_api_data()
+function fetch_api_data($ID = null)
 {
     $curl = curl_init();
     $apiEndpoint = 'https://api.open2view.com/nz/properties.json?detail=full';
+    $username = trim(get_field('api_user', 'option'));
+    $password = trim(get_field('api_key', 'option'));
 
     curl_setopt_array(
         $curl,
@@ -159,12 +105,28 @@ function fetch_api_data()
         return false;
     }
 
+    //  if there is a passed ID in the function
+
+    if ($ID !== null && is_int($ID)) {
+        if (isset($apiDataArr["properties"])) {
+
+            $raw_data = $apiDataArr["properties"]["property"];
+
+            foreach ($raw_data as $subArray) {
+                if (isset($subArray['id']) && $subArray['id'] === $ID) {
+                    $resultArray = $subArray;
+                    break;
+                }
+            }
+            if (isset($resultArray)) {
+                return $resultArray;
+            }
+        }
+    }
+
     // Ensure 'properties' key exists in the response
     if (isset($apiDataArr["properties"])) {
-        $data_to_return = $apiDataArr["properties"];
-
-        // $filename = esc_url(get_template_directory_uri()) . '/public/data.json';
-        // file_put_contents($filename, json_encode($data_to_return));
+        $data_to_return = $apiDataArr["properties"]["property"];
 
         return $data_to_return;
     } else {
@@ -172,6 +134,19 @@ function fetch_api_data()
         return false;
     }
 }
+
+// Get Properties ID Array 
+
+function get_api_data_ID_array()
+{
+    $data = fetch_api_data();
+    foreach ($data as $new) {
+        $data_ID[] = $new["id"];
+    }
+    return $data_ID;
+}
+
+
 // fetch_api_data();
 function get_api_data()
 {
@@ -181,55 +156,190 @@ function get_api_data()
     // return $data;
 }
 
+// Adding custom post type 'Property'
 
+add_action('init', 'register_property_cpt');
 
-function create_acf_fields_from_array($field_array, $parent_group_key = null)
+function register_property_cpt()
 {
-    if (function_exists('acf_add_local_field_group')) {
-        $fields = array();
+    register_post_type('properties', [
+        'label' => "Properties",
+        'public' => true,
+        'capability_type' => 'post'
+    ]);
+}
 
-        foreach ($field_array as $key => $value) {
-            $field_key = 'field_' . uniqid();
 
-            $field = array(
-                'key' => $field_key,
-                'label' => ucfirst($key),
-                'name' => $key,
-                'type' => is_array($value) ? 'group' : 'text',
-                'instructions' => 'Enter ' . ucfirst($key) . ' field-id = ' . $field_key,
-                'required' => false,
-                'default_value' => $value,
-            );
+// Add an option Page 
 
-            // If it's a nested array, create subfields recursively
-            if (is_array($value)) {
-                $field['type'] = 'group';
-                $field['sub_fields'] = create_acf_fields_from_array($value, $field_key);
-            }
+if (function_exists('acf_add_options_page')) {
+    acf_add_options_page(array(
+        'page_title'    => 'Theme Options',
+        'menu_title'    => 'Theme Options',
+        'menu_slug'     => 'theme-options',
+        'capability'    => 'edit_posts',
+        'redirect'      => false
+    ));
+}
 
-            $fields[] = $field;
-        }
 
-        if ($parent_group_key) {
-            return $fields;
-        } else {
-            $field_group = array(
-                'key' => 'group_' . uniqid(),
-                'title' => 'Custom Fields',
-                // Replace with your desired field group title
-                'fields' => $fields,
-                'location' => array(
-                    array(
-                        array(
-                            'param' => 'post_type',
-                            'operator' => '==',
-                            'value' => 'post',
-                        ),
-                    ),
-                ),
-            );
+// Cron 
 
-            acf_add_local_field_group($field_group);
-        }
+if (!wp_next_scheduled('get_properties_from_api')) {
+    wp_schedule_event(time(), 'twicedaily', 'get_properties_from_api');
+}
+
+add_action('wp_ajax_nopriv_get_properties_from_api', 'get_properties_from_api');
+add_action('wp_ajax_get_properties_from_api', 'get_properties_from_api');
+
+
+// function get_properties_from_api()
+// {
+//     // $file = get_stylesheet_directory() . '/report.txt';
+//     $properties = fetch_api_data();
+//     if (!is_array($properties) || empty($properties)) {
+//         return false;
+//     }
+//     foreach ($properties as $property) {
+//         $property_slug = sanitize_title($property['address']['address'] . '-' . $property['id']);
+
+//         // Inserting post for each property
+
+//         $inserted_property =  wp_insert_post([
+//             'post_name' => $property_slug,
+//             'post_title' => $property_slug,
+//             'post_type' => 'properties',
+//             'post_status' => 'publish'
+//         ]);
+
+//         if (is_wp_error($inserted_property)) {
+//             continue;
+//         }
+
+//         $fields_to_insert = [
+//             'field_658147d726ae9' => 'id',
+//             'field_6581460f26acd' => 'address["address"]',
+//             'field_6581462926ace' => 'agency_id',
+//             'field_6581463626acf' => 'status',
+//             'field_6581464226ad0' => 'latitude',
+//             'field_6581464626ad1' => 'longitude',
+//             'field_6581464e26ad2' => 'price',
+//             'field_6581468826ad3' => 'price_from',
+//             'field_6581469026ad4' => 'price_to',
+//             'field_6581469b26ad5' => 'category',
+//             'field_658146a126ad6' => 'property_type',
+//             'field_658146a826ad7' => 'suburb',
+//             'field_658146ad26ad8' => 'area',
+//             'field_658146b426ad9' => 'region',
+//             'field_658146c626ada' => 'bedrooms',
+//             'field_658146d326adb' => 'bathrooms',
+//             'field_658146dd26adc' => 'garages',
+//             'field_658146e326add' => 'floor_size',
+//             'field_658146ec26ade' => 'lot_size',
+//             'field_6581470026adf' => 'built_in',
+//             'field_6581470826ae0' => 'description',
+//             'field_658147e526aea' => 'last_updated',
+//             'field_658147ec26aeb' => 'approved'
+//         ];
+
+//         foreach ($fields_to_insert as $key => $name) {
+//             $field_value = isset($property[$name]) ? $property[$name] : null;
+//             update_field($key, $field_value, $inserted_property);
+//         }
+//     }
+// }
+
+
+function get_properties_from_api()
+{
+    $properties = fetch_api_data();
+
+    if (!is_array($properties) || empty($properties)) {
+        wp_send_json_error('Unable to fetch properties from the API.');
     }
+
+    foreach ($properties as $property) {
+        $property_slug = sanitize_title($property['address']['address'] . '-' . $property['id']);
+
+        $existing_post_id = get_post_id_by_slug($property_slug);
+
+        if (!$existing_post_id) {
+            $inserted_property = wp_insert_post([
+                'post_name'   => $property_slug,
+                'post_title'  => $property_slug,
+                'post_type'   => 'properties',
+                'post_status' => 'publish',
+            ]);
+
+            if (is_wp_error($inserted_property)) {
+                continue;
+            }
+        } else {
+            $inserted_property = $existing_post_id;
+        }
+        update_acf_fields($property, $inserted_property);
+
+        // $existing_property_timestamp = get_field("last_updated", $existing_post_id);
+    }
+}
+
+function update_acf_fields($property_data, $post_id)
+{
+    $fields_to_insert = [
+        'field_658147d726ae9' => 'id',
+        'field_6581462926ace' => 'agency_id',
+        'field_6581463626acf' => 'status',
+        'field_6581464226ad0' => 'latitude',
+        'field_6581464626ad1' => 'longitude',
+        'field_6581464e26ad2' => 'price',
+        'field_6581468826ad3' => 'price_from',
+        'field_6581469026ad4' => 'price_to',
+        'field_6581469b26ad5' => 'category',
+        'field_658146a126ad6' => 'property_type',
+        'field_658146a826ad7' => 'suburb',
+        'field_658146ad26ad8' => 'area',
+        'field_658146b426ad9' => 'region',
+        'field_658146c626ada' => 'bedrooms',
+        'field_658146d326adb' => 'bathrooms',
+        'field_658146dd26adc' => 'garages',
+        'field_658146e326add' => 'floor_size',
+        'field_658146ec26ade' => 'lot_size',
+        'field_6581470026adf' => 'built_in',
+        'field_6581470826ae0' => 'description',
+        'field_658147e526aea' => 'last_updated',
+        'field_658147ec26aeb' => 'approved'
+    ];
+
+    $address = isset($property_data['address']['address']) ? $property_data['address']['address'] : null;
+    update_field('field_6581460f26acd', $address, $post_id);
+
+    $photos = isset($property_data['photos']['photo']) ? $property_data['photos']['photo'] : [];
+    update_field('field_6581472526ae2', $photos, $post_id);
+
+    // updating video repeater
+
+    $videos = isset($property_data['videos']['video']) ? $property_data['videos']['video'] : [];
+    update_field('field_6581474026ae3', $videos, $post_id);
+
+    // updating home view repeater 
+
+    $homeview = isset($property_data['homeviews']['homeviews']) ? $property_data['homeviews']['homeviews'] : [];
+    update_field('field_6581475b26ae4', $homeview, $post_id);
+
+    $virtualtours = isset($property_data['virtualtours']) ? $property_data['virtualtours'] : [];
+    update_field('field_6581476926ae5', $virtualtours, $post_id);
+
+    $floorplans = isset($property_data['floorplans']['floorplan']) ? $property_data['floorplans']['floorplan'] : [];
+    update_field('field_658147b826ae6', $floorplans, $post_id);
+
+    foreach ($fields_to_insert as $key => $name) {
+        $field_value = isset($property_data[$name]) ? $property_data[$name] : null;
+        update_field($key, $field_value, $post_id);
+    }
+}
+
+function get_post_id_by_slug($slug)
+{
+    $post = get_page_by_path($slug, OBJECT, 'properties');
+    return $post ? $post->ID : 0;
 }
