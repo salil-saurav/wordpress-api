@@ -113,8 +113,6 @@ add_action('init', 'remove_custom_post_types');
 function fetch_api_data()
 {
     $curl = curl_init();
-    $username = 'di.balich';
-    $password = 'G$p%8S=es#Cx';
     $apiEndpoint = 'https://api.open2view.com/nz/properties.json?detail=full';
 
     curl_setopt_array(
