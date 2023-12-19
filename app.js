@@ -1,8 +1,6 @@
 // const data = require("./data.json");
 // const parsedData = data.properties.property;
 
-const username = "di.balich";
-const password = "G$p%8S=es#Cx";
 const url = "https://api.open2view.com/nz/properties.json?detail=full";
 const urlWithID = `https://api.open2view.com/nz/properties/{id}.json`;
 
