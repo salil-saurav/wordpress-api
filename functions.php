@@ -12,22 +12,34 @@ function add_scripts()
     wp_register_style('bootstrap', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css', array(), null);
     wp_enqueue_style('bootstrap');
 
+    wp_register_style('owl-carousel-css', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css', array(), null);
+    wp_enqueue_style('owl-carousel-css');
+    wp_register_style('owl-carousel-css-theme', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css', array(), null);
+    wp_enqueue_style('owl-carousel-css-theme');
+
     wp_register_style('font-awesome',  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), null);
     wp_enqueue_style('font-awesome');
 
     wp_register_style('style', get_stylesheet_directory_uri() . '/style.css', array(), null);
     wp_enqueue_style('style');
+
     wp_register_style('responsive', get_stylesheet_directory_uri() . '/responsive.css', array(), null);
     wp_enqueue_style('responsive');
 
     wp_register_script('custom-jquery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js', array(), null, true);
     wp_enqueue_script('custom-jquery');
 
+    wp_register_script('owl-carousel', 'https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js', array(), null, true);
+    wp_enqueue_script('owl-carousel');
     wp_register_script('bootstrap', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js', array(), null, true);
     wp_enqueue_script('bootstrap');
 
-    wp_register_script('script', get_stylesheet_directory_uri() . '/app.js', array(), null, true);
+    wp_register_script('initialize', get_stylesheet_directory_uri() . '/scripts/initialize.js', array(), null, true);
+    wp_enqueue_script('initialize');
+    wp_register_script('script', get_stylesheet_directory_uri() . '/scripts/app.js', array(), null, true);
     wp_enqueue_script('script');
+    // wp_localize_script('custom-script', 'apiData', fetch_api_data());
+    // wp_localize_script('script', 'apiData', fetch_api_data());
 }
 
 add_action('wp_enqueue_scripts', 'add_scripts', 999);
@@ -37,19 +49,6 @@ add_action('wp_enqueue_scripts', 'add_scripts', 999);
 // register_nav_menus(array(
 //     'primary' => __('Primary Menu', 'Wonder Thai Massage'),
 // ));
-
-function remove_custom_post_types()
-{
-    $post_types_to_remove = array('treatments', 'products', 'testimonials', 'galleries');
-
-    foreach ($post_types_to_remove as $post_type) {
-        unregister_post_type($post_type);
-    }
-}
-
-add_action('init', 'remove_custom_post_types');
-
-
 
 // Api Fetch 
 
@@ -156,20 +155,6 @@ function get_api_data()
     // return $data;
 }
 
-// Adding custom post type 'Property'
-
-add_action('init', 'register_property_cpt');
-
-function register_property_cpt()
-{
-    register_post_type('properties', [
-        'label' => "Properties",
-        'public' => true,
-        'capability_type' => 'post'
-    ]);
-}
-
-
 // Add an option Page 
 
 if (function_exists('acf_add_options_page')) {
@@ -182,7 +167,6 @@ if (function_exists('acf_add_options_page')) {
     ));
 }
 
-
 // Cron 
 
 if (!wp_next_scheduled('get_properties_from_api')) {
@@ -191,63 +175,6 @@ if (!wp_next_scheduled('get_properties_from_api')) {
 
 add_action('wp_ajax_nopriv_get_properties_from_api', 'get_properties_from_api');
 add_action('wp_ajax_get_properties_from_api', 'get_properties_from_api');
-
-
-// function get_properties_from_api()
-// {
-//     // $file = get_stylesheet_directory() . '/report.txt';
-//     $properties = fetch_api_data();
-//     if (!is_array($properties) || empty($properties)) {
-//         return false;
-//     }
-//     foreach ($properties as $property) {
-//         $property_slug = sanitize_title($property['address']['address'] . '-' . $property['id']);
-
-//         // Inserting post for each property
-
-//         $inserted_property =  wp_insert_post([
-//             'post_name' => $property_slug,
-//             'post_title' => $property_slug,
-//             'post_type' => 'properties',
-//             'post_status' => 'publish'
-//         ]);
-
-//         if (is_wp_error($inserted_property)) {
-//             continue;
-//         }
-
-//         $fields_to_insert = [
-//             'field_658147d726ae9' => 'id',
-//             'field_6581460f26acd' => 'address["address"]',
-//             'field_6581462926ace' => 'agency_id',
-//             'field_6581463626acf' => 'status',
-//             'field_6581464226ad0' => 'latitude',
-//             'field_6581464626ad1' => 'longitude',
-//             'field_6581464e26ad2' => 'price',
-//             'field_6581468826ad3' => 'price_from',
-//             'field_6581469026ad4' => 'price_to',
-//             'field_6581469b26ad5' => 'category',
-//             'field_658146a126ad6' => 'property_type',
-//             'field_658146a826ad7' => 'suburb',
-//             'field_658146ad26ad8' => 'area',
-//             'field_658146b426ad9' => 'region',
-//             'field_658146c626ada' => 'bedrooms',
-//             'field_658146d326adb' => 'bathrooms',
-//             'field_658146dd26adc' => 'garages',
-//             'field_658146e326add' => 'floor_size',
-//             'field_658146ec26ade' => 'lot_size',
-//             'field_6581470026adf' => 'built_in',
-//             'field_6581470826ae0' => 'description',
-//             'field_658147e526aea' => 'last_updated',
-//             'field_658147ec26aeb' => 'approved'
-//         ];
-
-//         foreach ($fields_to_insert as $key => $name) {
-//             $field_value = isset($property[$name]) ? $property[$name] : null;
-//             update_field($key, $field_value, $inserted_property);
-//         }
-//     }
-// }
 
 
 function get_properties_from_api()
