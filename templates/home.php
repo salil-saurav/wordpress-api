@@ -3,27 +3,79 @@
 /* Template Name: Home */
 
 get_header();
+
+$custom_posts = get_posts(array(
+    'post_type' => 'properties',
+    'posts_per_page' => -1, // Retrieve all posts
+));
+
+$custom_fields = array("bedrooms", "bathrooms", "garages", "status");
+
+$value_arrays = array();
+$occurrence_arrays = array();
+
+foreach ($custom_fields as $field) {
+    $field_values = array();
+    $field_occurrences = array();
+
+    // Loop through custom posts
+    foreach ($custom_posts as $post) {
+        $custom_val = get_field($field, $post->ID);
+
+        if ($custom_val) {
+            $field_values[] = $custom_val;
+        }
+    }
+
+    // Count occurrences and store in the associative arrays
+    $field_occurrences = array_count_values($field_values);
+    arsort($field_occurrences);
+
+    $value_arrays[$field] = $field_occurrences;
+
+    // Collect maximum values
+    $max_values[$field] = array_keys($field_occurrences);
+}
+
 ?>
 
 <div class="main">
-
 
     <div class="search-bar">
         <div class="search-input">
             <select name="status" id="property-status">
                 <option value="all" selected>All</option>
-                <option value="current">Open</option>
-                <option value="sold">Sold</option>
+                <?php
+                foreach ($max_values["status"] as $options) { ?>
+                    <option value="<?= $options ?>"> <?= $options ?></option>
+                <?php  }
+                ?>
             </select>
             <input type="text" id="property-input">
             <select name="bed" id="bedroom">
-                <option value="1" selected>Bed</option>
+                <option value="" selected>Bed</option>
+                <?php
+                foreach ($max_values["bedrooms"] as $options) { ?>
+                    <option value="<?= $options ?>"> <?= $options ?></option>
+                <?php  }
+                ?>
             </select>
             <select name="bath" id="bathroom">
-                <option value="1" selected>Bath</option>
+                <option value="" selected>Bath</option>
+                <?php
+                foreach ($max_values["bathrooms"] as $options) { ?>
+                    <option value="<?= $options ?>"> <?= $options ?></option>
+                <?php  }
+                ?>
             </select>
-            <select name="garage" id="garage">
-                <option value="1" selected>Car</option>
+
+            <select name="car" id="garage">
+                <option value="" selected>Garage</option>
+                <?php
+                foreach ($max_values["garages"] as $options) { ?>
+                    <option value="<?= $options ?>"> <?= $options ?></option>
+                <?php  }
+                ?>
             </select>
         </div>
     </div>
@@ -41,11 +93,6 @@ get_header();
 
         <div id="fetched-result">
             <?php
-            $custom_posts = get_posts(array(
-                'post_type' => 'properties',
-                'posts_per_page' => -1, // Retrieve all posts
-            ));
-
             foreach ($custom_posts as $post) {
                 setup_postdata($post);
                 $image_cont = get_field("photos");
@@ -62,7 +109,6 @@ get_header();
                 </div>
             <?php }
             wp_reset_postdata();
-
             ?>
         </div>
     </div>
