@@ -41,9 +41,8 @@ get_header();
 
         <div id="fetched-result">
             <?php
-            // Replace 'your_post_type' with the actual post type slug
             $custom_posts = get_posts(array(
-                'post_type'      => 'properties',
+                'post_type' => 'properties',
                 'posts_per_page' => -1, // Retrieve all posts
             ));
 
@@ -55,7 +54,9 @@ get_header();
                     <div class="image-div">
                         <a href="<?= get_permalink(); ?>" target="_blank">
                             <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
-                            <span class="result-address"><?= get_field("address") ?></span>
+                            <span class="result-address">
+                                <?= get_field("address") ?>
+                            </span>
                         </a>
                     </div>
                 </div>
@@ -120,7 +121,7 @@ get_header();
     }
 
     .main {
-        width: 1440px;
+        width: 1000px;
         padding: 0 15px;
         margin: 0 auto;
     }
