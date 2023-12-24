@@ -97,7 +97,7 @@ foreach ($custom_fields as $field) {
                 setup_postdata($post);
                 $image_cont = get_field("photos");
             ?>
-                <div class="result">
+                <div class="result <?= '_' . strtolower(get_field("status")) . '_' ?>">
                     <div class="image-div">
                         <a href="<?= get_permalink(); ?>" target="_blank">
                             <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
@@ -123,6 +123,10 @@ foreach ($custom_fields as $field) {
         flex-wrap: wrap;
         gap: 15px;
         justify-content: space-between;
+    }
+
+    .result._sold_ img {
+        filter: grayscale(1);
     }
 
     #fetched-result .result:nth-child(6n),
