@@ -69,8 +69,8 @@ foreach ($custom_fields as $field) {
                 ?>
             </select>
 
-            <select name="car" id="garage">
-                <option value="" selected>Garage</option>
+            <select name="car" id="car">
+                <option value="" selected>Car</option>
                 <?php
                 foreach ($max_values["garages"] as $options) { ?>
                     <option value="<?= $options ?>"> <?= $options ?></option>
@@ -84,32 +84,146 @@ foreach ($custom_fields as $field) {
         <div class="filter">
             <select name="order" id="date-filter">
                 <option value="newest" selected>Newest</option>
-                <option value="highest-price">Highest Price</option>
-                <option value="lowest-price">Lowest Price</option>
+                <option value="highest">Highest Price</option>
+                <option value="lowest">Lowest Price</option>
                 <option value="oldest">Oldest</option>
                 <option value="auction">Auction</option>
+                <option value="auction">private Sale</option>
+                <option value="auction">Off Market</option>
             </select>
         </div>
 
         <div id="fetched-result">
-            <?php
-            foreach ($custom_posts as $post) {
-                setup_postdata($post);
-                $image_cont = get_field("photos");
-            ?>
-                <div class="result <?= '_' . strtolower(get_field("status")) . '_' ?>">
-                    <div class="image-div">
-                        <a href="<?= get_permalink(); ?>" target="_blank">
-                            <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
-                            <span class="result-address">
-                                <?= get_field("address") ?>
-                            </span>
-                        </a>
+            <div id="all-result" style="display: flex;">
+                <?php
+                foreach ($custom_posts as $post) {
+                    setup_postdata($post);
+                    $image_cont = get_field("photos");
+                ?>
+                    <div class="result <?= '_' . strtolower(get_field("status")); ?>" style="display: block;">
+                        <div class="image-div">
+                            <a href="<?= get_permalink(); ?>" target="_blank">
+                                <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
+                                <span class="result-address">
+                                    <?= get_field("address") ?>
+                                </span>
+                            </a>
+                            <div class="props">
+                                <span class="hidden">
+                                    bedrooms: <span class="bedroom"> <?= get_field("bedrooms") ?></span>
+                                </span>
+                                <span class="hidden">
+                                    bathrooms: <span class="bathroom"> <?= get_field("bathrooms") ?></span>
+                                </span>
+                                <span class="hidden">
+                                    car: <span class="car"> <?= get_field("garages") ?></span>
+                                </span>
+                                <span class="hidden">
+                                    <span class="date"> <?= get_field("approved"); ?></span>
+                                    <span class="lower"> <?= get_field("price_from"); ?></span>
+                                    <span class="higher"> <?= get_field("price_to"); ?></span>
+                                </span>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
-            <?php }
-            wp_reset_postdata();
-            ?>
+                <?php }
+                wp_reset_postdata();
+                ?>
+            </div>
+
+            <hr>
+            <div id="sold-result">
+                <?php
+
+                foreach ($custom_posts as $post) {
+                    setup_postdata($post);
+                    $image_cont = get_field("photos");
+
+                    if (get_field("status") === "SOLD") {
+                ?>
+
+                        <div class="sold" style="display: block;">
+                            <div class="image-div">
+                                <a href="<?= get_permalink(); ?>" target="_blank">
+                                    <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
+                                    <span class="result-address">
+                                        <?= get_field("address"); ?>
+                                        <?= get_field("status"); ?>
+                                    </span>
+
+                                </a>
+                                <div class="props">
+                                    <span class="hidden">
+                                        bedrooms: <span class="bedroom"> <?= get_field("bedrooms") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        bathrooms: <span class="bathroom"> <?= get_field("bathrooms") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        car: <span class="car"> <?= get_field("garages") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        <span class="date"> <?= get_field("approved"); ?></span>
+                                        <span class="lower"> <?= get_field("price_from"); ?></span>
+                                        <span class="higher"> <?= get_field("price_to"); ?></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                <?php
+                        wp_reset_postdata();
+                    }
+                }
+                ?>
+            </div>
+
+            <div id="buy-result">
+                <?php
+
+                foreach ($custom_posts as $post) {
+                    setup_postdata($post);
+                    $image_cont = get_field("photos");
+
+                    if (get_field("status") === "CURRENT") {
+                ?>
+
+                        <div class="buy" style="display: block;">
+                            <div class="image-div">
+                                <a href="<?= get_permalink(); ?>" target="_blank">
+                                    <img class="result-image" src="<?= $image_cont[0]['url'] ?>" alt="result-image">
+                                    <span class="result-address">
+                                        <?= get_field("address"); ?>
+                                        <?= get_field("status"); ?>
+                                    </span>
+
+                                </a>
+                                <div class="props">
+                                    <span class="hidden">
+                                        bedrooms: <span class="bedroom"> <?= get_field("bedrooms") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        bathrooms: <span class="bathroom"> <?= get_field("bathrooms") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        car: <span class="car"> <?= get_field("garages") ?></span>
+                                    </span>
+                                    <span class="hidden">
+                                        <span class="date"> <?= get_field("approved"); ?></span>
+                                        <span class="lower"> <?= get_field("price_from"); ?></span>
+                                        <span class="higher"> <?= get_field("price_to"); ?></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                <?php
+                        wp_reset_postdata();
+                    }
+                }
+                ?>
+            </div>
         </div>
     </div>
 
@@ -117,7 +231,9 @@ foreach ($custom_fields as $field) {
 
 
 <style>
-    #fetched-result {
+    #all-result,
+    #sold-result,
+    #buy-result {
         margin-top: 3rem;
         display: flex;
         flex-wrap: wrap;
@@ -125,23 +241,54 @@ foreach ($custom_fields as $field) {
         justify-content: space-between;
     }
 
-    .result._sold_ img {
+    #sold-result,
+    #buy-result {
+        display: none;
+    }
+
+
+    .sold img,
+    ._sold img {
         filter: grayscale(1);
     }
 
-    #fetched-result .result:nth-child(6n),
-    #fetched-result .result:nth-child(6n+1) {
+    .props {
+        position: absolute;
+        font-size: 18px;
+        color: midnightblue;
+    }
+
+    .hidden {
+        /* display: none; */
+    }
+
+    #all-result .result:not([style*="display: none"]):nth-child(6n),
+    #buy-result .buy:not([style*="display: none"]):nth-child(6n),
+    #sold-result .sold:not([style*="display: none"]):nth-child(6n),
+    #all-result .result:not([style*="display: none"]):nth-child(6n+1),
+    #sold-result .sold:not([style*="display: none"]):nth-child(6n+1),
+    #buy-result .buy:not([style*="display: none"]):nth-child(6n+1) {
         width: calc(50% - 12px);
     }
+
 
     .image-div a:hover img {
         transform: scale(0.9);
         filter: brightness(0.5);
     }
 
-    .result {
+    .result,
+    .sold,
+    .buy {
         width: calc(25% - 17px);
         position: relative;
+        animation-fill-mode: both;
+        animation-duration: 500ms;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        opacity: 1;
+        animation-name: revealAnimation;
+
     }
 
     .result-address {
@@ -171,7 +318,7 @@ foreach ($custom_fields as $field) {
     }
 
     .main {
-        width: 1000px;
+        width: 1400px;
         padding: 0 15px;
         margin: 0 auto;
     }
@@ -203,6 +350,18 @@ foreach ($custom_fields as $field) {
 
     .search-bar .search-input input {
         width: 533px;
+    }
+
+    @keyframes revealAnimation {
+        0% {
+            opacity: 0;
+            transform: translate3d(0px, 50px, 0px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: none;
+        }
     }
 </style>
 

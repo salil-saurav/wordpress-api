@@ -44,7 +44,7 @@ require_once('../../../wp-load.php');
 //         return $resultArray;
 //     }
 // }
-
+gsdd
 
 // get image URL
 function get_image_url(int $ID)
